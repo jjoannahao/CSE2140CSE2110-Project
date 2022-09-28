@@ -41,9 +41,9 @@ def scenario3Art():
 def scenario4Art():
     print("""
    ___
-  /   \\
- /
-/
+  /   \\_          _
+ /               /
+/               /
 4. Parabolic to a boat higher above the water.
 """)
 
@@ -61,11 +61,6 @@ Find the total distance the cannonball travels away from the cannon. """)
         return int(scenario)
     else:
         return menu()
-
-
-def calculateTime(height):
-    time = math.sqrt(2 * height / 9.81)
-    return time
 
 
 def scenario1():
@@ -194,15 +189,11 @@ def calculateDistance3(speed, angle, height):
 
     # to get time as part of scenario 2 component of scenario 3
     time1 = -2 * initial_y_speed / -9.81
-    print(f"{time1} is the time for the scenario 2 component")
 
     # to get time as part of scenario 1 component of scenario 3
-    final_y_speed = -1 * math.sqrt(initial_y_speed**2 + 2 * -9.81 * -1 * height)
-    print(f"{final_y_speed} is the final y velocity")
-    time2 = (final_y_speed - initial_y_speed) / -9.81
-    print(f"{time2} is the time for the scenario 1 component")
+    final_y_speed = -1 * math.sqrt(initial_y_speed**2 + 2 * -9.81 * -height)
+    time2 = (final_y_speed + initial_y_speed) / -9.81
     total_time = time1 + time2
-    print(f"{total_time} is the total time")
 
     distance = total_time * horizontal_speed
     return distance
@@ -214,11 +205,11 @@ def calculateDistance4(speed, angle, enemy_height):
     initial_y_speed = speed * math.sin(angle)
 
     # calculate time (using y values first)
-    final_y_speed = -1 * math.sqrt(initial_y_speed**2 + 2 * -9.81 * enemy_height)
-    time = (final_y_speed - initial_y_speed)/-9.81
+    final_y_speed1 = -1 * math.sqrt(initial_y_speed**2 + 2 * -9.81 * enemy_height)
+    time1 = (final_y_speed1 - initial_y_speed)/-9.81
 
-    distance = initial_x_speed * time
-    return distance
+    distance1 = initial_x_speed * time1
+    return distance1
 
 
 # --- OUTPUTS
