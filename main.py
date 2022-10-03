@@ -14,7 +14,7 @@ def scenario1Art():
 |   \\
 |    \\
 |     \\
-1. horizontal to the water
+1. Horizontal to the water
 """)
 
 
@@ -34,7 +34,7 @@ def scenario3Art():
  /   \\
 |     \\
 |      \\
-3. Parabolic to a smaller boat away
+3. Parabolic to a smaller boat far away
 """)
 
 
@@ -43,7 +43,7 @@ def scenario4Art():
    ___
   /   \\_          _
  /               /
-/               /
+/          or   /
 4. Parabolic to a boat higher above the water.
 """)
 
@@ -71,13 +71,13 @@ def scenario1():
     # PROCESSING
     # checking validity of inputs
     if speed.isnumeric():
-        speed = int(speed)
+        speed = float(speed)
     else:
         print("Please enter a valid speed.")
         return scenario1()
 
     if height.isnumeric():
-        height = int(height)
+        height = float(height)
     else:
         print("Please enter a valid height.")
         return scenario1()
@@ -94,13 +94,13 @@ def scenario2():
     # PROCESSING
     # checking validity of inputs
     if speed.isnumeric():
-        speed = int(speed)
+        speed = float(speed)
     else:
         print("Please enter a valid speed.")
         return scenario2()
 
     if angle.isnumeric():
-        angle_rads = math.radians(int(angle))
+        angle_rads = math.radians(float(angle))
     else:
         print("Please enter a valid angle.")
         return scenario2()
@@ -118,19 +118,19 @@ def scenario3():
     # PROCESSING
     # checking validity of inputs
     if speed.isnumeric():
-        speed = int(speed)
+        speed = float(speed)
     else:
         print("Please enter a valid speed.")
         return scenario3()
 
     if angle.isnumeric():
-        angle_rads = math.radians(int(angle))
+        angle_rads = math.radians(float(angle))
     else:
         print("Please enter a valid angle.")
         return scenario3()
 
     if height.isnumeric():
-        height = int(height)
+        height = float(height)
     else:
         print("Please enter a valid height.")
         return scenario3()
@@ -147,19 +147,19 @@ def scenario4():
     # PROCESSING
     # checking validity of inputs
     if speed.isnumeric():
-        speed = int(speed)
+        speed = float(speed)
     else:
         print("Please enter a valid speed.")
         return scenario4()
 
     if angle.isnumeric():
-        angle_rads = math.radians(int(angle))
+        angle_rads = math.radians(float(angle))
     else:
         print("Please enter a valid angle.")
         return scenario4()
 
     if enemy_height.isnumeric():
-        enemy_height = int(enemy_height)
+        enemy_height = float(enemy_height)
     else:
         print("Please enter a valid enemy ship height.")
         return scenario4()
@@ -200,41 +200,54 @@ def calculateDistance3(speed, angle, height):
 
 
 def calculateDistance4(speed, angle, enemy_height):
-    # page 45 question 2
+    # FAR DISTANCE
     initial_x_speed = speed * math.cos(angle)
     initial_y_speed = speed * math.sin(angle)
 
     # calculate time (using y values first)
     final_y_speed1 = -1 * math.sqrt(initial_y_speed**2 + 2 * -9.81 * enemy_height)
+    final_y_speed2 = -1 * final_y_speed1
     time1 = (final_y_speed1 - initial_y_speed)/-9.81
+    time2 = (final_y_speed2 - initial_y_speed)/-9.81
 
     distance1 = initial_x_speed * time1
-    return distance1
+    distance2 = initial_x_speed * time2
+    return distance1, distance2
 
 
-# --- OUTPUTS
-def displayDistance(distance):
+# --- OUTPUT
+def displayDistance(distance, distance2):
     print(f"The total distance the cannonball travelled is: {distance:.2f}m.")
+    if distance2 != 0:
+        print(f"The total distance the cannonball travelled is either: {distance:.2f}m or {distance2:.2f}m.")
 
+def calcAgain():
+    again = input("Want to make another calculation? (Y/n): ")
+    if again == "y" or again == "Y" or again == "" or again == "yes":
+        return True
+    else:
+        exit()
 
 # ----- MAIN PROGRAM CODE ----- #
 if __name__ == "__main__":
-    # INPUTS
-    scenario = menu()
+    while True:
+        # INPUTS
+        scenario = menu()
 
-    # PROCESSING
-    if scenario == 1:
-        speed, height = scenario1()
-        distance = calculateDistance1(height, speed)
-    elif scenario == 2:
-        speed, angle_rads = scenario2()
-        distance = calculateDistance2(speed, angle_rads)
-    elif scenario == 3:
-        speed, angle_rads, height = scenario3()
-        distance = calculateDistance3(speed, angle_rads, height)
-    else:
-        speed, angle_rads, enemy_height = scenario4()
-        distance = calculateDistance4(speed, angle_rads, enemy_height)
+        # PROCESSING
+        if scenario == 1:
+            speed, height = scenario1()
+            distance, distance2 = calculateDistance1(height, speed), 0
+        elif scenario == 2:
+            speed, angle_rads = scenario2()
+            distance, distance2 = calculateDistance2(speed, angle_rads), 0
+        elif scenario == 3:
+            speed, angle_rads, height = scenario3()
+            distance, distance2 = calculateDistance3(speed, angle_rads, height), 0
+        else:
+            speed, angle_rads, enemy_height = scenario4()
+            distance, distance2 = calculateDistance4(speed, angle_rads, enemy_height)
 
-    # OUTPUTS
-    displayDistance(distance)
+        # OUTPUTS
+        displayDistance(distance, distance2)
+        calcAgain()
