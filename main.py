@@ -3,7 +3,6 @@ title: Cannonball Distance Calculator
 author: Joanna Hao
 date-created: 2022-09-23
 """
-# math library trig functions in radians (need to convert to degrees)
 import math
 
 
@@ -50,6 +49,10 @@ def scenario4Art():
 
 # --- INPUTS
 def menu():
+    """
+    Display starting text and ask user for scenario
+    :return: int
+    """
     print("""Welcome to the Navy canon distance calculator. 
 Find the total distance the cannonball travels away from the cannon. """)
     scenario1Art()
@@ -64,6 +67,10 @@ Find the total distance the cannonball travels away from the cannon. """)
 
 
 def scenario1():
+    """
+    ask for inputs for scenario 1 and check their validity
+    :return: floats
+    """
     # INPUTS
     speed = input("What is the speed of the cannonball (m/s)? ")
     height = input("What is the height of the cannonball above the water? ")
@@ -87,6 +94,10 @@ def scenario1():
 
 
 def scenario2():
+    """
+    ask for inputs of scenario 2 and check their validity
+    :return: floats
+    """
     # INPUTS
     speed = input("What is the speed of the cannonball (m/s)? ")
     angle = input("What is the angle along the horizontal (degrees)? ")
@@ -110,6 +121,10 @@ def scenario2():
 
 
 def scenario3():
+    """
+    ask for inputs for scenario 3 and check their validity
+    :return: floats
+    """
     # INPUTS
     speed = input("What is the speed of the cannonball (m/s)? ")
     angle = input("What is the angle along the horizontal (degrees)? ")
@@ -139,6 +154,10 @@ def scenario3():
     return speed, angle_rads, height
 
 def scenario4():
+    """
+    ask for inputs for scenario 4 and check their validity
+    :return: floats
+    """
     # INPUTS
     speed = input("What is the speed of the cannonball (m/s)? ")
     angle = input("What is the angle along the horizontal (degrees)? ")
@@ -170,20 +189,42 @@ def scenario4():
 
 # --- PROCESSING
 def calculateDistance1(height_above, speed):
-    time = math.sqrt(2 * height_above / 9.81)
+    """
+    calculate horizontal distance for scenario 1
+    :param height_above: float
+    :param speed: float
+    :return: float
+    """
+    time = math.sqrt(2 * height_above / 9.81)  # calculate time in air
     distance = speed * time
     return distance
 
 
 def calculateDistance2(speed, angle):
+    """
+    calculate horizontal distance for scenario 2
+    :param speed: float
+    :param angle: float
+    :return: float
+    """
+    # break given speed into x & y components
     horizontal_speed = speed * math.cos(angle)
     vertical_speed = speed * math.sin(angle)
-    time = 2 * (vertical_speed/9.81)
-    distance = horizontal_speed * time
+
+    time = 2 * (vertical_speed/9.81)  # calculate time in air w/ Vy
+    distance = horizontal_speed * time  # calculate distance w/ Vx
     return distance
 
 
 def calculateDistance3(speed, angle, height):
+    """
+    calculate horizontal distance for scenario 3
+    :param speed: float
+    :param angle: float
+    :param height: float
+    :return: float
+    """
+    # break given speed into x & y components
     horizontal_speed = speed * math.cos(angle)
     initial_y_speed = speed * math.sin(angle)
 
@@ -195,59 +236,78 @@ def calculateDistance3(speed, angle, height):
     time2 = (final_y_speed + initial_y_speed) / -9.81
     total_time = time1 + time2
 
-    distance = total_time * horizontal_speed
+    distance = total_time * horizontal_speed  # calculate distance w/ total air time
     return distance
 
 
 def calculateDistance4(speed, angle, enemy_height):
-    # FAR DISTANCE
+    """
+    calculate horizontal distance for scenario 4
+    :param speed: float
+    :param angle: float
+    :param enemy_height: float
+    :return: float
+    """
+    # break given speed into x & y components
     initial_x_speed = speed * math.cos(angle)
     initial_y_speed = speed * math.sin(angle)
 
     # calculate time (using y values first)
-    final_y_speed1 = -1 * math.sqrt(initial_y_speed**2 + 2 * -9.81 * enemy_height)
-    final_y_speed2 = -1 * final_y_speed1
-    time1 = (final_y_speed1 - initial_y_speed)/-9.81
-    time2 = (final_y_speed2 - initial_y_speed)/-9.81
+    final_y_speed1 = -1 * math.sqrt(initial_y_speed**2 + 2 * -9.81 * enemy_height)  # farther distance Vfy
+    final_y_speed2 = -1 * final_y_speed1  # closer distance Vfy
+    time1 = (final_y_speed1 - initial_y_speed)/-9.81  # farther distance total time
+    time2 = (final_y_speed2 - initial_y_speed)/-9.81  # closer distance total time
 
-    distance1 = initial_x_speed * time1
-    distance2 = initial_x_speed * time2
+    distance1 = initial_x_speed * time1  # farther distance cannonball may travel
+    distance2 = initial_x_speed * time2  # closer distance cannonball may travel
     return distance1, distance2
 
 
 # --- OUTPUT
 def displayDistance(distance, distance2):
+    """
+    display horizontal distance calculated
+    :param distance: float
+    :param distance2: float or int
+    :return: None
+    """
     print(f"The total distance the cannonball travelled is: {distance:.2f}m.")
     if distance2 != 0:
         print(f"The total distance the cannonball travelled is either: {distance:.2f}m or {distance2:.2f}m.")
 
+
 def calcAgain():
+    """
+    determine whether user wants to make another calculation
+    :return: None
+    """
     again = input("Want to make another calculation? (Y/n): ")
     if again == "y" or again == "Y" or again == "" or again == "yes":
-        return True
+        pass
     else:
         exit()
+
 
 # ----- MAIN PROGRAM CODE ----- #
 if __name__ == "__main__":
     while True:
         # INPUTS
-        scenario = menu()
+        SCENARIO = menu()
 
         # PROCESSING
-        if scenario == 1:
-            speed, height = scenario1()
-            distance, distance2 = calculateDistance1(height, speed), 0
-        elif scenario == 2:
-            speed, angle_rads = scenario2()
-            distance, distance2 = calculateDistance2(speed, angle_rads), 0
-        elif scenario == 3:
-            speed, angle_rads, height = scenario3()
-            distance, distance2 = calculateDistance3(speed, angle_rads, height), 0
+        if SCENARIO == 1:
+            SPEED, HEIGHT = scenario1()
+            DISTANCE, DISTANCE2 = calculateDistance1(HEIGHT, SPEED), 0
+        elif SCENARIO == 2:
+            SPEED, ANGLE_RADS = scenario2()
+            DISTANCE, DISTANCE2 = calculateDistance2(SPEED, ANGLE_RADS), 0
+        elif SCENARIO == 3:
+            SPEED, ANGLE_RADS, HEIGHT = scenario3()
+            DISTANCE, DISTANCE2 = calculateDistance3(SPEED, ANGLE_RADS, HEIGHT), 0
         else:
-            speed, angle_rads, enemy_height = scenario4()
-            distance, distance2 = calculateDistance4(speed, angle_rads, enemy_height)
+            SPEED, ANGLE_RADS, ENEMY_HEIGHT = scenario4()
+            DISTANCE, DISTANCE2 = calculateDistance4(SPEED, ANGLE_RADS, ENEMY_HEIGHT)
 
         # OUTPUTS
-        displayDistance(distance, distance2)
+        displayDistance(DISTANCE, DISTANCE2)
         calcAgain()
